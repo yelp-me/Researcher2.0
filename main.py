@@ -1,24 +1,19 @@
-# main.py
-
 import os
 import streamlit as st
 from dotenv import load_dotenv
 
 from langchain_groq import ChatGroq
 from langchain.agents import initialize_agent, AgentType
-from tools import (
-    pdf_search,
-    web_search,
-    arxiv_search,
-    wikipedia_search,
-   
-)
+from tools.web_search import web_search
+from tools.pdf_search import pdf_search
+from tools.arxiv_search import arxiv_search
+from tools.wikipedia_search import wikipedia_search
 
 # Load environment variables
 load_dotenv()
 os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
 
-# Load agent prompt
+# Load system prompt
 def load_prompt(path="prompts/agent_prompt.txt") -> str:
     with open(path, "r") as f:
         return f.read()
@@ -26,17 +21,11 @@ def load_prompt(path="prompts/agent_prompt.txt") -> str:
 system_prompt = load_prompt()
 
 # Set up LLM
-llm = ChatGroq(model_name="mixtral-8x7b-32768")
-
-# Initialize agent
+llm = ChatGroq(model_name="llama3-8b-8192")
+tools = [web_search, pdf_search,arxiv_search, wikipedia_search]
+# Define agent directly here
 agent = initialize_agent(
-    tools=[
-        pdf_search,
-        web_search,
-        arxiv_search,
-        wikipedia_search,
-      
-    ],
+    tools,
     llm=llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,

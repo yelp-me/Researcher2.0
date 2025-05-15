@@ -26,4 +26,4 @@ def pdf_search(query: str) -> str:
     if not results:
         return "No relevant info found in the PDF."
 
-    return "\n\n".join([doc.page_content for doc in results[:2]])
+    return results
