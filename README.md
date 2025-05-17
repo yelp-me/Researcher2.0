@@ -1,122 +1,116 @@
-# 🧠 CoreSearch — Gen AI Research Assistant
+# 🧠 CoreSearch — Research Assistant for Fast Answers
 
-CoreSearch is a lightweight AI research assistant powered by Groq (Mistral SABA 24B) and LangChain. It lets you upload PDFs, ask questions, and pull in answers from multiple sources like the web, Wikipedia, and arXiv — all from a clean Streamlit interface.
+**CoreSearch** is a no-nonsense research assistant built with Groq (Mistral SABA 24B) and LangChain. Upload your PDFs, ask questions, and get relevant info from the web, Wikipedia, and arXiv — all inside a simple Streamlit app.
 
-No bloat. No memory. Just straight answers.
+No chat history. No fluff. Just fast answers.
 
 ---
 
-## 🚀 Features
+## 🚀 What It Does
 
-- 🔍 **Ask questions about any PDF**  
-  Uses LangChain + Chroma + Ollama-style embeddings to search your uploaded docs.
+- **Ask Questions About PDFs**  
+  Index and search your uploaded documents using vector embeddings.
 
-- 🌐 **Live Web Search**  
+- **Live Web Search**  
   Pulls real-time info using DuckDuckGo.
 
-- 📚 **arXiv Search**  
-  Finds relevant academic papers via the arXiv API.
+- **arXiv Search**  
+  Finds related academic papers using the arXiv API.
 
-- 📖 **Wikipedia Lookup**  
-  Gets quick, high-level summaries and facts.
+- **Wikipedia Lookup**  
+  Quick summaries and facts from Wikipedia.
 
-- ⚡ **Fast LLM Backend**  
-  Powered by Groq-hosted `mistral-saba-24b` — one of the fastest available LLMs.
+- **Fast Backend**  
+  Runs on Groq-hosted `mistral-saba-24b`, one of the fastest open LLMs.
 
-- 🎨 **Modern UI**  
-  Minimalist Streamlit chat interface with a custom dark theme.
+- **Simple UI**  
+  Streamlit-powered dark interface. Clean and functional.
 
-- 🔧 **No Tool Overuse**  
-  Uses the ReAct agent framework to make smart tool choices — only one per query.
-
----
-
-## 🛠 Tech Stack
-
-| Tech               | Role                         |
-|--------------------|------------------------------|
-| **Streamlit**      | Frontend UI                  |
-| **LangChain**      | Agent + tool logic           |
-| **Groq + Mistral** | LLM backend (mistral-saba-24b) |
-| **Chroma**         | PDF vector DB                |
-| **OllamaEmbeddings** | Text embedding model      |
-| **DuckDuckGo**     | Web search                   |
-| **arXiv API**      | Academic paper lookup        |
-| **Wikipedia API**  | Quick fact search            |
+- **Smart Tool Use**  
+  Uses ReAct agent logic to choose one tool per question — nothing extra.
 
 ---
 
-## 🧪 Local Setup
+## 🛠 Stack
 
-### ✅ Step 1: Clone the Repo
+| Tool/Library        | Purpose                     |
+|---------------------|-----------------------------|
+| Streamlit           | Web UI                      |
+| LangChain           | Agent and tool control      |
+| Groq + Mistral      | Language model backend      |
+| Chroma              | Vector DB for PDFs          |
+| OllamaEmbeddings    | Text embedding              |
+| DuckDuckGo          | Real-time web search        |
+| arXiv API           | Academic paper search       |
+| Wikipedia API       | Quick fact retrieval        |
+
+---
+
+## 🧪 Getting Started (Local)
+
+### 1. Clone the Repo
 
 ```bash
 git clone https://github.com/your-username/coresearch
 cd coresearch
+```
 
-
-## ✅ Step 2: Create a Virtual Environment
-
-To isolate your project dependencies, set up a virtual environment.
-
-### 🔧 Create and Activate:
+### 2. Set Up a Virtual Environment
 
 ```bash
 python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-### 📁 `STEP_3_INSTALL_REQUIREMENTS.md`
-
-```markdown
-# ✅ Step 3: Install Dependencies
-
-Install all Python libraries needed for CoreSearch.
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
+```
 
+### 4. Add Your API Key
 
-### 📁 `STEP_4_ENV_FILE.md`
+Create a `.env` file in the root of the project and add your Groq API key:
 
-```markdown
-# ✅ Step 4: Add API Key
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-Create a `.env` file in your project root and paste your **Groq API key**:
+> Grab your free key at: https://console.groq.com  
+> Make sure `.env` is in your `.gitignore` file.
 
-
-Get a free API key from 👉 https://console.groq.com
-
-> This is used to authenticate your app with Groq’s LLM infrastructure.
-
-Make sure `.env` is in your `.gitignore` so it doesn't get pushed to GitHub.
-
-# ✅ Step 5: Run the App
-
-Start the Streamlit server:
+### 5. Run the App
 
 ```bash
 streamlit run main.py
-
+```
 
 ---
 
-### 📁 `STEP_6_FOLDER_LAYOUT.md`
+## 📁 Project Structure
 
-```markdown
-# ✅ Step 6: Folder Layout Overview
-
-Here’s what your project structure should look like:
-
+```
 coresearch/
-├── main.py # Streamlit app + agent logic
+├── main.py                  # Streamlit app + agent logic
 ├── prompts/
-│ └── agent_prompt.txt # System prompt
+│   └── agent_prompt.txt     # System prompt for the agent
 ├── tools/
-│ ├── pdf_search.py
-│ ├── web_search.py
-│ ├── arxiv_search.py
-│ └── wikipedia_search.py
+│   ├── pdf_search.py
+│   ├── web_search.py
+│   ├── arxiv_search.py
+│   └── wikipedia_search.py
 ├── uploads/
-│ └── latest.pdf # Most recent uploaded PDF
-├── .env # Your Groq API key
-├── .gitignore # Ignore .env, venv, etc.
-└── requirements.txt # Python packages
+│   └── latest.pdf           # Most recently uploaded PDF
+├── .env                     # Your Groq API key
+├── .gitignore               # Ignore .env, venv, etc.
+└── requirements.txt         # Python dependencies
+```
+
+---
+
+## 🔒 Note
+
+CoreSearch does not store any data or chat history. It’s designed for fast, single-session research. Use it like a sharp tool — upload, ask, get out.
+
+---
+
