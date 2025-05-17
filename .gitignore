@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+myenv
+
+# Environment variables
+.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code / IDE configs
+.vscode/
+.idea/
+
+# Mac OS
+.DS_Store
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Logs / cache
+*.log
+*.sqlite3
+.cache/
+.mypy_cache/
+pytest_cache/
+
+# Chroma vector DB (optional)
+chroma_store/
+
+# Uploads
+uploads/
+
