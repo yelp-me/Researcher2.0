@@ -24,7 +24,7 @@ myenv
 
 # Mac OS
 .DS_Store
-
+uploads
 # Streamlit secrets
 .streamlit/secrets.toml
 
