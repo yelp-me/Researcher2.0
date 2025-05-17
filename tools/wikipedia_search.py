@@ -17,3 +17,4 @@ def wikipedia_search(query: str) -> str:
     """
     result = search.invoke(query)
     return result
+
