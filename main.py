@@ -29,13 +29,6 @@ prompt = ChatPromptTemplate.from_messages([
     ("user", "{input}")
 ])
 
-def format_log_to_messages(intermediate_steps):
-    messages = []
-    for action, observation in intermediate_steps:
-        messages.append(AIMessage(content=action.log))
-        messages.append(HumanMessage(content=f"Observation: {observation}"))
-    return messages
-
 # Set up logic agent
 agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
 agent_executor = AgentExecutor.from_agent_and_tools(
@@ -76,10 +69,8 @@ if user_input:
 
     with st.chat_message("assistant"):
         with st.spinner("Working on it..."):
-            response = agent_executor.invoke({
-                "input": user_input,
-                "agent_scratchpad": format_log_to_messages([]),
-            })
+            # ❌ Removed agent_scratchpad
+            response = agent_executor.invoke({"input": user_input})
             answer = response["output"]
             st.markdown(answer)
 
