@@ -4,6 +4,8 @@
 
 No chat history. No fluff. Just fast answers.
 
+👉 Try it live: [https://core-search.streamlit.app/](https://core-search.streamlit.app/)
+
 ---
 
 ## 🚀 What It Does
@@ -38,7 +40,7 @@ No chat history. No fluff. Just fast answers.
 | Streamlit           | Web UI                      |
 | LangChain           | Agent and tool control      |
 | Groq + Mistral      | Language model backend      |
-| Chroma              | Vector DB for PDFs          |
+| **FAISS**           | Vector DB for PDFs          |
 | OllamaEmbeddings    | Text embedding              |
 | DuckDuckGo          | Real-time web search        |
 | arXiv API           | Academic paper search       |
@@ -111,6 +113,3 @@ coresearch/
 ## 🔒 Note
 
 CoreSearch does not store any data or chat history. It’s designed for fast, single-session research. Use it like a sharp tool — upload, ask, get out.
-
----
-
