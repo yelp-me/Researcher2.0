@@ -1,9 +1,8 @@
 import os
 import streamlit as st
 from langchain_groq import ChatGroq
-from langchain.agents import create_react_agent, AgentExecutor
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage
+from langgraph.prebuilt import create_react_agent
 
 from tools.pdf_search import pdf_search
 from tools.web_search import web_search
@@ -17,14 +16,18 @@ st.set_page_config(page_title="CoreSearch", page_icon="🧠", layout="wide")
 st.markdown("""
     <style>
         .big-title {
-            font-size: 2.4rem;
-            font-weight: 600;
+            font-size: 3rem;
+            font-weight: 800;
             margin-bottom: 0;
         }
         .sub-text {
-            color: gray;
-            font-size: 0.95rem;
+            color: #6c757d;
+            font-size: 1rem;
             margin-top: 0;
+        }
+        .clear-button {
+            text-align: right;
+            margin-top: -30px;
         }
     </style>
     <div class='big-title'>🧠 CoreSearch</div>
@@ -49,22 +52,16 @@ system_prompt = load_prompt()
 # Setup model & tools
 llm = ChatGroq(model_name="mistral-saba-24b")
 tools = [pdf_search, web_search, arxiv_search, wikipedia_search]
-
-prompt = ChatPromptTemplate.from_template(system_prompt)
-
-
-agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
-agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent,
-    tools=tools,
-    verbose=True,
-    handle_parsing_errors=True,
-    return_intermediate_steps=True,
-)
+agent = create_react_agent(llm, tools)
 
 # Session history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+# Clear button
+if st.button("Clear Chat"):
+    st.session_state.chat_history = []
+    st.rerun()
 
 # Upload block
 uploaded_file = st.file_uploader("📄 Upload your PDF", type=["pdf"])
@@ -74,35 +71,48 @@ if uploaded_file:
         f.write(uploaded_file.read())
     st.success("PDF uploaded. You can now ask questions about it.")
 else:
-    st.info("Upload a PDF to enable document-based search.")
+    st.markdown("_No PDF uploaded. You can still ask general questions._")
 
 # Display past chat
 for role, msg in st.session_state.chat_history:
     with st.chat_message(role):
-        st.markdown(msg)
+        if role == "user":
+            st.markdown(f"**You:** {msg}")
+        else:
+            st.markdown(f"**CoreSearch:** {msg}")
 
 # Input box
 user_input = st.chat_input("Ask something about the PDF, web, arXiv, or Wikipedia...")
 
 if user_input:
-    st.chat_message("user").markdown(user_input)
+    st.chat_message("user").markdown(f"**You:** {user_input}")
     st.session_state.chat_history.append(("user", user_input))
 
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = agent_executor.invoke({"input": user_input})
-            answer = response["output"]
-            st.markdown(f"**Answer:**\n\n{answer}")
+            response = agent.invoke({
+                "messages": [{"role": "user", "content": user_input}]
+            })
+            answer = response["messages"][-1].content
+            st.markdown(f"**CoreSearch:** {answer}")
 
-            if "intermediate_steps" in response:
-                with st.expander("🧠 Agent Thought Process", expanded=False):
-                    for i, (action, observation) in enumerate(response["intermediate_steps"], 1):
+            tool_messages = [
+                msg for msg in response["messages"]
+                if msg.type in ("tool", "function")
+            ]
+
+            if tool_messages:
+                with st.expander("🧠 Agent Tool Usage", expanded=False):
+                    for i, msg in enumerate(tool_messages, 1):
+                        role = msg.type
+                        name = getattr(msg, "name", "unknown_tool")
+                        content = msg.content
                         st.markdown(f"""
-**Step {i}**
-- Thought: {action.log.strip()}
-- Action: `{action.tool}`
-- Input: `{action.tool_input}`
-- Observation: {observation}
+---
+**Step {i}**  
+- Role: `{role}`  
+- Tool: `{name}`  
+- Content: `{content}`
 """)
 
     st.session_state.chat_history.append(("assistant", answer))
