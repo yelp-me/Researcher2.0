@@ -112,4 +112,4 @@ coresearch/
 
 ## 🔒 Note
 
-CoreSearch does not store any data or chat history. It’s designed for fast, single-session research. Use it like a sharp tool — upload, ask, get out.
+CoreSearch does not store data over sessions. It’s designed for fast, single-session research. Use it like a sharp tool — upload, ask, get out.
